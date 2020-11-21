@@ -1,0 +1,13 @@
+# Core
+gunicorn
+dash>=1.0.0
+dash-core-components
+dash-html-components
+dash-bootstrap-components
+dash-renderer
+
+# Additional
+plotly~=4.12.0
+pandas~=1.1.3
+bs4~=4.9.3
+requests~=2.24.0
