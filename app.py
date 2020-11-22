@@ -86,48 +86,6 @@ NAVBAR = dbc.Navbar(
     sticky="top",
 )
 
-
-# CONTROLS = dbc.Form(
-#     [
-#         dbc.FormGroup(
-#             [
-#                 dbc.Label("Market Symbol"),
-#                 dcc.Dropdown(
-#                     options=ticker_labels + howard_lindzon_8_80,
-#                     value="SPY",
-#                     multi=False,
-#                     id="ticker_dropdown",
-#                     style={'font-size': "80%"},
-#                     searchable=True
-#                 )
-#             ]
-#         ),
-#
-#         dbc.FormGroup(
-#             [
-#                 dbc.Label("Regression Models"),
-#                 dcc.Dropdown(
-#                     options=[
-#                         {"label": "OLS Linear Regression", "value": "OLS Linear Regression"},
-#                         {"label": "Ridge Regression", "value": "Ridge Regression"},
-#                         {"label": "Stochastic Gradient Descent", "value": "Stochastic Gradient Descent"},
-#                         {"label": "Support Vector Regressor", "value": "Support Vector Regressor"},
-#                         {"label": "Voting Regressor", "value": "Voting Regressor"}
-#                     ],
-#                     value='Voting Regressor',
-#                     multi=False,
-#                     id="model_dropdown",
-#                     style={'font-size': "90%"}
-#                 )
-#             ]
-#         )
-#
-#     ],
-#     className="pretty_container"
-# )
-
-
-
 CHART = dcc.Graph(
     id="main_chart",
     figure=create_figure(),
@@ -148,21 +106,6 @@ app.layout = html.Div(
         BODY
     ]
 )
-
-
-# @app.callback(
-#     [Output("main_chart", "figure"),
-#      Output("r2-score", "children"),
-#      Output("rmse-score", "children"),
-#      Output("mpd-score", "children"),
-#      Output("mgd-score", "children")],
-#     [Input("ticker_dropdown", "value"),
-#      Input("model_dropdown", "value")]
-# )
-# def update_figure(symbol, model):
-#     vix_data, predictions, metrics = make_data(symbol, model)
-#     fig = create_figure(vix_data, predictions, symbol)
-#     return fig, metrics['R2'], metrics['RMSE'], metrics['MPD'], metrics['MGD']
 
 
 if __name__ == "__main__":
