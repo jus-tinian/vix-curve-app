@@ -6,7 +6,6 @@ import dash_html_components as html
 import plotly.graph_objects as go
 import requests
 from bs4 import BeautifulSoup
-from dash.dependencies import Input, Output
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
