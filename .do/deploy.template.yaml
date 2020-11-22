@@ -1,0 +1,8 @@
+spec:
+  name: vix-curve-app
+  services:
+  - environment_slug: python
+    git:
+      branch: main
+      repo_clone_url: https://github.com/jus-tinian/vix-curve-app.git
+    name: vix-curve-app
