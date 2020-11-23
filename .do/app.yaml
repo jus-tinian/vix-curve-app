@@ -1,8 +1,0 @@
-name: vix-curve-app
-services:
-- environment_slug: python
-  github:
-    branch: main
-    deploy_on_push: true
-    repo: jus-tinian/vix-curve-app
-  name: vix-curve-app
