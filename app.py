@@ -18,7 +18,7 @@ def get_vix_data():
     url = 'http://www.cboe.com/delayedquote/futures-quotes'
     req = requests.get(url)
     soup = BeautifulSoup(req.text)
-    vx = soup.find_all('table')[6]
+    vx = soup.find_all('table')[6]  # locates the table for VX contracts
     vx = [i.text.strip() for i in vx.find_all('td')]
     quotes = pd.DataFrame({
         "Symbol": vx[::9],
@@ -96,9 +96,9 @@ CHART = dcc.Graph(
     id="main_chart",
     figure=create_figure(),
     config={
-        'responsive': True,  # dynamically resizes Graph with browser winder
+        'responsive': True,  # dynamically resizes Graph with browser window
         'displayModeBar': True,  # always show the Graph tools
-        'displaylogo': False # remove the plotly logo
+        'displaylogo': False  # remove the plotly logo
     }
 )
 
@@ -108,7 +108,7 @@ BODY = dbc.Container(dbc.Col(CHART, className='pretty_container'), className='ma
 app.layout = html.Div(
     [
         NAVBAR,
-        html.Br(),
+        html.Br(),  # creates space between navbar and graph
         BODY
     ]
 )
