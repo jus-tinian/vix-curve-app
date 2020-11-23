@@ -81,7 +81,7 @@ NAVBAR = dbc.Navbar(
         html.A(
             # Use row and col to control vertical alignment of logo / brand
             dbc.Row(
-                [dbc.Col(dbc.NavbarBrand("Wango Contango"))],
+                [dbc.Col(dbc.NavbarBrand("S&P 500 Volatility Index"))],
                 align="center",
                 no_gutters=True,
             )
