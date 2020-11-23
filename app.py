@@ -17,7 +17,7 @@ def get_vix_data():
 
     url = 'http://www.cboe.com/delayedquote/futures-quotes'
     req = requests.get(url)
-    soup = BeautifulSoup(req.text)
+    soup = BeautifulSoup(req.text, parser='html.parser', features='lxml')
     vx = soup.find_all('table')[6]
     vx = [i.text.strip() for i in vx.find_all('td')]
     quotes = pd.DataFrame({
@@ -28,11 +28,15 @@ def get_vix_data():
         "High": vx[4::9],
         "Low": vx[5::9],
         "Settlement": vx[6::9],
-        "Volume": vx[7::9],
-        "Open Int": vx[8::9]
+        "Volume": [i.replace(',', '') for i in vx[7::9]],
+        "Open Int": [i.replace(',', '') for i in vx[8::9]]
     })
     # dropping weeklies
     quotes = quotes.loc[quotes['Symbol'].str.len() == 5, :]
+
+    quotes['Expiration'] = pd.to_datetime(quotes['Expiration'])
+    quotes[['Volume', 'Open Int']] = quotes[['Volume', 'Open Int']].astype('int')
+    quotes[['Last', 'Change', 'High', 'Low', 'Settlement']] = quotes[['Last', 'Change', 'High', 'Low', 'Settlement']].astype('float')
 
     if quotes['Last'].iloc[-1] == 0:
         quotes = quotes.iloc[:-1, :]
