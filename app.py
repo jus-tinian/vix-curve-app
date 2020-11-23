@@ -34,6 +34,9 @@ def get_vix_data():
     # dropping weeklies
     quotes = quotes.loc[quotes['Symbol'].str.len() == 5, :]
 
+    if quotes['Last'].iloc[-1] == 0:
+        quotes = quotes.iloc[:-1, :]
+
     return quotes
 
 
