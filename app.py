@@ -17,7 +17,7 @@ def get_vix_data():
 
     url = 'http://www.cboe.com/delayedquote/futures-quotes'
     req = requests.get(url)
-    soup = BeautifulSoup(req.text)
+    soup = BeautifulSoup(req.text, features='lxml')
     vx = soup.find_all('table')[6]
     vx = [i.text.strip() for i in vx.find_all('td')]
     quotes = pd.DataFrame({
