@@ -201,14 +201,22 @@ BODY = dbc.Container(
 
     ])
 
-# the main app.yaml layout
-app.layout = html.Div(
-    [
-        NAVBAR,
-        html.Br(),
-        BODY
-    ]
-)
+
+# serve on refresh
+def serve_layout():
+
+    layout = html.Div(
+        [
+            NAVBAR,
+            html.Br(),
+            BODY
+        ]
+    )
+
+    return layout
+
+
+app.layout = serve_layout
 
 
 if __name__ == "__main__":
