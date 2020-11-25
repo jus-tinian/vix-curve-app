@@ -164,7 +164,7 @@ BODY = dbc.Container(
 app.layout = html.Div(
     [
         NAVBAR,
-        html.Br(),  # creates space between navbar and graph
+        html.Br(),
         BODY
     ]
 )
