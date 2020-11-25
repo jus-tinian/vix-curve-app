@@ -5,6 +5,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objects as go
 import requests
+import yfinance as yf
 from bs4 import BeautifulSoup
 
 
@@ -102,7 +103,62 @@ CHART = dcc.Graph(
     }
 )
 
-BODY = dbc.Container(dbc.Col(CHART, className='pretty_container'), className='main_chart')
+VIX_CARDS = dbc.Row(
+
+    [
+
+        dbc.Col(
+            [
+                dbc.Card([
+                    html.H4('VIX Spot'),
+                    html.H6(str(yf.Ticker('^VIX').history(period="5d")['Close'].iloc[-1])[:5], id='spot')
+                ], id='vix-spot', className='mini_container')
+            ]),
+
+        dbc.Col(
+            [
+                dbc.Card([
+                    html.H4('VIX9D'),
+                    html.H6(str(yf.Ticker('^VIX9D').history(period="5d")['Close'].iloc[-1])[:5], id='9d')
+                ], id='vix-9d', className='mini_container')
+            ]),
+
+        dbc.Col(
+            [
+                dbc.Card([
+                    html.H4('VIX3M'),
+                    html.H6(str(yf.Ticker('^VIX3M').history(period="5d")['Close'].iloc[-1])[:5], id='3m')
+                ], id='vix-3m', className='mini_container')
+            ]),
+
+        dbc.Col(
+            [
+                dbc.Card([
+                    html.H4('VIX6M'),
+                    html.H6(str(yf.Ticker('^VIX6M').history(period="5d")['Close'].iloc[-1])[:5], id='6m')
+                ], id='vix-6m', className='mini_container')
+            ]),
+
+        dbc.Col(
+            [
+                dbc.Card([
+                    html.H4('VIX1Y'),
+                    html.H6(str(yf.Ticker('^VIX1Y').history(period="5d")['Close'].iloc[-1])[:5], id='1y')
+                ], id='vix-1y', className='mini_container')
+            ])
+
+    ], id='metrics_card')
+
+BODY = dbc.Container(
+    [
+
+        VIX_CARDS,
+
+        dbc.Row([
+            dbc.Col(CHART, className='pretty_container')
+        ], className='main_chart'),
+
+    ])
 
 # the main app.yaml layout
 app.layout = html.Div(
