@@ -97,7 +97,7 @@ CHART = dcc.Graph(
     id="main_chart",
     figure=create_figure(),
     config={
-        'responsive': True,  # dynamically resizes Graph with browser window
+        'responsive': True,  # dynamically resize Graph with browser window
         'displayModeBar': True,  # always show the Graph tools
         'displaylogo': False  # remove the plotly logo
     }
