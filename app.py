@@ -8,6 +8,7 @@ import requests
 import yfinance as yf
 from bs4 import BeautifulSoup
 from plotting import plot_distributions
+from dash.dependencies import Input, Output
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -129,16 +130,6 @@ VIX_CURVE = dcc.Graph(
     }
 )
 
-VIX_SPOT_HIST = dcc.Graph(
-    id="vix_hist",
-    figure=plot_distributions(yf.Ticker('^VIX').history(period="Max")[['Close']]),
-    config={
-        'responsive': True,  # dynamically resize Graph with browser window
-        'displayModeBar': True,  # always show the Graph tools
-        'displaylogo': False  # remove the plotly logo
-    }
-)
-
 vix_products = get_vix_products()
 VIX_CARDS = dbc.Row(
 
@@ -186,6 +177,17 @@ VIX_CARDS = dbc.Row(
 
     ], id='metrics_card')
 
+
+VIX_SPOT_HIST = dcc.Graph(
+    id="vix_hist",
+    figure=plot_distributions(yf.Ticker('^VIX').history(period="Max")[['Close']], vix_products['VIX']),
+    config={
+        'responsive': True,  # dynamically resize Graph with browser window
+        'displayModeBar': True,  # always show the Graph tools
+        'displaylogo': False  # remove the plotly logo
+    }
+)
+
 BODY = dbc.Container(
     [
 
@@ -201,22 +203,32 @@ BODY = dbc.Container(
 
     ])
 
-
-# serve on refresh
-def serve_layout():
-
-    layout = html.Div(
-        [
-            NAVBAR,
-            html.Br(),
-            BODY
-        ]
-    )
-
-    return layout
+app.layout = html.Div(
+    [
+        NAVBAR,
+        html.Br(),
+        BODY,
+        dcc.Interval(id='interval_component', interval=60000, n_intervals=0)
+    ]
+)
 
 
-app.layout = serve_layout
+@app.callback(
+    [Output("vix_curve", "figure"),
+     Output("vix_hist", "figure"),
+     Output("spot", "children"),
+     Output("9d", "children"),
+     Output("3m", "children"),
+     Output("6m", "children"),
+     Output("1y", "children")],
+    Input("interval_component", "n_intervals")
+)
+def update_figure(n):
+    vix_products = get_vix_products()
+    fig = create_figure()
+    hist = plot_distributions(yf.Ticker('^VIX').history(period="Max")[['Close']], vix_products['VIX'])
+    updates = fig, hist, vix_products['VIX'], vix_products['VIX9D'], vix_products['VIX3M'], vix_products['VIX6M'], vix_products['VIX1Y']
+    return updates
 
 
 if __name__ == "__main__":

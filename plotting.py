@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 
-def plot_distributions(data_obj):
+def plot_distributions(data_obj, last):
 
     features = data_obj.columns
     start = data_obj.index[0].date()
@@ -29,7 +29,7 @@ def plot_distributions(data_obj):
         c = dm[1]+1  # col num
         sp.add_trace(go.Box(x=data_obj[feature], name='', marker=dict(color=colors[2]), showlegend=False), row=1, col=c)
         sp.add_trace(go.Bar(x=bins, y=counts, marker={'color': counts, 'colorscale': 'viridis'}, showlegend=False), row=2, col=c)
-        last_price = data_obj[feature].iloc[-1]
+        last_price = float(last)
         sp.add_shape(type='line',
                      line=dict(color=colors[-4],
                                width=3, dash='dot'),
@@ -37,10 +37,10 @@ def plot_distributions(data_obj):
                      y1=line_height, x0=last_price, x1=last_price)
     sp.update_xaxes(showgrid=False)
 
-    sp.add_annotation(x=last_price*1.2,
+    sp.add_annotation(x=last_price*1.25,
                       y=counts.max() * .75,
                       xref='x1', yref='y2',
-                      text='Last Spot-VIX',
+                      text=f'Last Spot-VIX: {last}',
                       showarrow=False, font=dict(size=12))
 
     sp.update_layout(
