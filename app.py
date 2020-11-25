@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 import requests
 import yfinance as yf
 from bs4 import BeautifulSoup
+from plotting import plot_distributions
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -70,7 +71,7 @@ def create_figure():
             title='', yanchor="top", y=1.3, xanchor="left", x=0, orientation="h"
         ),
         xaxis_rangeslider_visible=False,
-        height=600,
+        height=500,
         margin=dict(l=25, r=10, b=25, t=50)
     )
 
@@ -93,9 +94,19 @@ NAVBAR = dbc.Navbar(
     sticky="top",
 )
 
-CHART = dcc.Graph(
-    id="main_chart",
+VIX_CURVE = dcc.Graph(
+    id="vix_curve",
     figure=create_figure(),
+    config={
+        'responsive': True,  # dynamically resize Graph with browser window
+        'displayModeBar': True,  # always show the Graph tools
+        'displaylogo': False  # remove the plotly logo
+    }
+)
+
+VIX_SPOT_HIST = dcc.Graph(
+    id="vix_hist",
+    figure=plot_distributions(yf.Ticker('^VIX').history(period="Max")[['Close']]),
     config={
         'responsive': True,  # dynamically resize Graph with browser window
         'displayModeBar': True,  # always show the Graph tools
@@ -155,7 +166,11 @@ BODY = dbc.Container(
         VIX_CARDS,
 
         dbc.Row([
-            dbc.Col(CHART, className='pretty_container')
+            dbc.Col(VIX_CURVE, className='pretty_container')
+        ], className='main_chart'),
+
+        dbc.Row([
+            dbc.Col(VIX_SPOT_HIST, className='pretty_container')
         ], className='main_chart'),
 
     ])
