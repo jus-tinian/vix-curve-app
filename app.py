@@ -46,6 +46,31 @@ def get_vix_data():
     return quotes
 
 
+def get_vix_products():
+
+    url = 'http://www.cboe.com/products/vix-index-volatility/volatility-indexes'
+    req = requests.get(url)
+    soup = BeautifulSoup(req.text)
+    quotes = soup.find_all('table')[1].text.split()
+    vix_index_start = quotes.index('VIX')
+    quotes = quotes[vix_index_start:]
+    quotes = pd.DataFrame([
+                  {
+                      'VIX': quotes[:3][1],
+                      'VXN': quotes[3:6][1],
+                      'VXO': quotes[6:9][1],
+                      'VXD': quotes[9:12][1],
+                      'RVX': quotes[12:15][1],
+                      'VIX9D': quotes[15:18][1],
+                      'VIX3M': quotes[18:21][1],
+                      'VIX6M': quotes[21:24][1],
+                      'VIX1Y': quotes[24:27][1]
+                   }
+     ])
+
+    return quotes.iloc[0]
+
+
 def create_figure():
 
     vix_data = get_vix_data()
@@ -114,6 +139,7 @@ VIX_SPOT_HIST = dcc.Graph(
     }
 )
 
+vix_products = get_vix_products()
 VIX_CARDS = dbc.Row(
 
     [
@@ -122,7 +148,7 @@ VIX_CARDS = dbc.Row(
             [
                 dbc.Card([
                     html.H4('VIX Spot'),
-                    html.H6(str(yf.Ticker('^VIX').history(period="5d")['Close'].iloc[-1])[:5], id='spot')
+                    html.H6(vix_products['VIX'], id='spot')
                 ], id='vix-spot', className='mini_container')
             ]),
 
@@ -130,7 +156,7 @@ VIX_CARDS = dbc.Row(
             [
                 dbc.Card([
                     html.H4('VIX9D'),
-                    html.H6(str(yf.Ticker('^VIX9D').history(period="5d")['Close'].iloc[-1])[:5], id='9d')
+                    html.H6(vix_products['VIX9D'], id='9d')
                 ], id='vix-9d', className='mini_container')
             ]),
 
@@ -138,7 +164,7 @@ VIX_CARDS = dbc.Row(
             [
                 dbc.Card([
                     html.H4('VIX3M'),
-                    html.H6(str(yf.Ticker('^VIX3M').history(period="5d")['Close'].iloc[-1])[:5], id='3m')
+                    html.H6(vix_products['VIX3M'], id='3m')
                 ], id='vix-3m', className='mini_container')
             ]),
 
@@ -146,7 +172,7 @@ VIX_CARDS = dbc.Row(
             [
                 dbc.Card([
                     html.H4('VIX6M'),
-                    html.H6(str(yf.Ticker('^VIX6M').history(period="5d")['Close'].iloc[-1])[:5], id='6m')
+                    html.H6(vix_products['VIX6M'], id='6m')
                 ], id='vix-6m', className='mini_container')
             ]),
 
@@ -154,7 +180,7 @@ VIX_CARDS = dbc.Row(
             [
                 dbc.Card([
                     html.H4('VIX1Y'),
-                    html.H6(str(yf.Ticker('^VIX1Y').history(period="5d")['Close'].iloc[-1])[:5], id='1y')
+                    html.H6(vix_products['VIX1Y'], id='1y')
                 ], id='vix-1y', className='mini_container')
             ])
 
