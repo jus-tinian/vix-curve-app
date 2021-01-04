@@ -1,3 +1,5 @@
+THIS APPLICATION NO LONGER FUNCTIONS AS THE DATA TARGET UPDATED IT'S HTML STRUCTURE :(
+
 After forking the project, install requirements with:
 
 ```sh
